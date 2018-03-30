@@ -15,7 +15,7 @@ Minimo Game backend build by Elixir Language.
 ```
 3. send by server-client protocol:
 ```
-iex(2)> request_map = %{
+iex(2)> request_data = %{
 ...(2)>   "load" => %{
 ...(2)>     "load" => %{"password" => "admin", "userName" => "admin"},
 ...(2)>     "path" => "login",
@@ -23,7 +23,7 @@ iex(2)> request_map = %{
 ...(2)>   },
 ...(2)>   "taskId" => "29482490533798-25"
 ...(2)> } #define request data
-iex(3)> json = Jason.encode! myJson #convert map to string
+iex(3)> json = Jason.encode! request_data #convert map to string
 iex(4)> size = byte_size json #calculate json string bytes
 iex(5)> send_rst = :gen_tcp.send socket, <<1::size(8), 125::big-32, json::binary>> #send bytes defined by server-client protocol
 ```
