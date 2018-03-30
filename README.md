@@ -5,7 +5,35 @@ Minimo Game backend build by Elixir Language.
 1. download source
 2. install dependency: use `mix deps.get` at root of the project
 3. run server: `MIX_ENV=test iex -S mix`
+```
+Erlang/OTP 20 [erts-9.3] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:10] [hipe] [kernel-poll:false] [dtrace]
 
+Elixir.Minimo.Application: start begin
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.MsgHander.start_link begin
+Elixir.Minimo.Socket.MsgHander.start_link end
+Elixir.Minimo.Socket.Worker: start_link begin
+Elixir.Minimo.Socket.Worker: start_link end
+Elixir.Minimo.Application: start end
+Interactive Elixir (1.6.4) - press Ctrl+C to exit (type h() ENTER for help)
+```
 ## Test login API
 1. open another REPL in the project: `MIX_ENV=test iex -S mix`
 2. connect to server over tcp:
