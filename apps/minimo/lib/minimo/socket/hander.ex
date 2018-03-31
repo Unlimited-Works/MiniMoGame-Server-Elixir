@@ -15,17 +15,20 @@ defmodule Minimo.Socket.Hander do
     IO.puts("#{__MODULE__}.init begin")
     :ok = :ranch.accept_ack(ref)
     IO.puts("#{__MODULE__}.init accept_ack")
-    loop(socket, transport)
+
+    # :begin is first byte which decided the following message protocol
+    # every message could define different protocol
+    loop(socket, transport, {:begin, 1})
     IO.puts("#{__MODULE__}.init end")
   end
 
-  def loop(socket, transport) do
-    case transport.recv(socket, 0, 100 * 365 * 24 * 60 * 60 * 1000) do
+  def loop(socket, transport, {state, length}) do
+    case transport.recv(socket, length, 100 * 365 * 24 * 60 * 60 * 1000) do
       {:ok, data} ->
 	IO.puts("#{__MODULE__}.loop ok begin")
 	# 修改该模块的代码，会重启socket链接，因为socket链接的进程调用了loop。所以连接模块的代码和业务逻辑的代码应该分开，业务逻辑的代码保持restful，确保热更新重启时不会导致运行时环境出问题。
-	Minimo.Socket.Router.dispatch(socket, transport, data)
-        Minimo.Socket.Hander.loop(socket, transport)
+	{:ok, new_state, new_length} = Minimo.Socket.Router.dispatch(socket, transport, data, state, length)
+        Minimo.Socket.Hander.loop(socket, transport, {new_state, new_length})
 	# IO.puts("#{__MODULE__}.loop ok end")
       _ ->
 	IO.puts("#{__MODULE__}.loop _")
