@@ -1,6 +1,26 @@
 defmodule Minimo.Application do
   use Application
+  
+  def start(_type, _args) do
+    import Supervisor.Spec, warn: false
 
+    children = [
+      {Task.Supervisor, name: Minimo.Connection.TaskSupervisor},
+      :poolboy.child_spec(:msg_hander, poolboy_config()),
+      worker(Minimo.Socket.Worker, []),
+      {Minimo.Sync.Position , name: Minimo.Sync.Position},
+      {Minimo.Socket.Status, name: Minimo.Socket.Status},
+      {Minimo.Util.IdServer, name: Minimo.Util.IdServer},
+    ]
+
+    opts = [strategy: :one_for_one, name: Minimo.TaskSupervisor]
+    rst = Supervisor.start_link(children, opts)
+
+    IO.puts("#{__MODULE__}: start applications")
+
+    rst
+  end
+  
   # used at deal with message
   defp poolboy_config do
     [
@@ -11,23 +31,4 @@ defmodule Minimo.Application do
     ]
   end
 
-  
-  def start(_type, _args) do
-    import Supervisor.Spec, warn: false
-
-    IO.puts("#{__MODULE__}: start begin")
-    children = [
-      {Task.Supervisor, name: Minimo.Connection.TaskSupervisor},
-      :poolboy.child_spec(:msg_hander, poolboy_config()),
-      worker(Minimo.Socket.Worker, [])
-
-    ]
-
-    opts = [strategy: :one_for_one, name: Minimo.TaskSupervisor]
-    rst = Supervisor.start_link(children, opts)
-
-    IO.puts("#{__MODULE__}: start end")
-
-    rst
-  end
 end

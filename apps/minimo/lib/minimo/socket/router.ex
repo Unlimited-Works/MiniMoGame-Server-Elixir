@@ -106,7 +106,8 @@ defmodule Minimo.Socket.Router do
       :msg_hander,
       fn pid ->
 	{task_id, load} = json_proto1(jsonb)
-        {atom_status, atom_type, map_logic_rst} = GenServer.call(pid, {:request, load})
+	context = %{socket: socket}
+        {atom_status, atom_type, map_logic_rst} = GenServer.call(pid, {:request, load, context})
 	
 	map_rst = %{
 	  "taskId" => task_id,
