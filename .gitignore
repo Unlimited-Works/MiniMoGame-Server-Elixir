@@ -24,3 +24,5 @@ erl_crash.dump
 
 *.beam
 *.tar
+
+/.elixir_ls

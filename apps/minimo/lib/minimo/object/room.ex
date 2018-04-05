@@ -12,6 +12,7 @@ defmodule Minimo.Object.Room do
 
   def create(user_id) do
     x = :ets.new()
+    :ets.lookup
     %{room_id: IdServer.new |> ObjectId.encode!}
   end
   

@@ -40,8 +40,8 @@ defmodule Minimo.Object.Map.Kongfu do
   """
   def create(roles) do
     id = ObjectId.encode!(IdServer.new)
-    table_map = :ets.new(:"#{__MODULE__}.map.#{id}", [:named_table, read_concurrency: true])
-    table_objs = :ets.new(:"#{__MODULE__}.objs.#{id}", [:named_table, read_concurrency: true])
+    table_map = :ets.new("#{__MODULE__}.map.#{id}", [:named_table, read_concurrency: true])
+    table_objs = :ets.new("#{__MODULE__}.objs.#{id}", [:named_table, read_concurrency: true])
     
     # init roles
 
@@ -65,7 +65,7 @@ defmodule Minimo.Object.Map.Kongfu do
       
     end
 
-    table_map
+    id
     
   end
 
@@ -74,7 +74,13 @@ defmodule Minimo.Object.Map.Kongfu do
   update(table_map, obj_id, fn item -> unit end)
   """
   def update(table_map, obj_id, f) do
-    :ets.update_element
+    map = :ets.lookup(table_map, obj_id)
+    :ets.update_element(table_map, obj_id, {2, f.(map)})
+  end
+  
+  def destory(table_map_id) do
+    :ets.delete(table_map)
+    :ets.delete()
   end
   
   
