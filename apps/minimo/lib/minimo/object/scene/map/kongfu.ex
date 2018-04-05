@@ -79,8 +79,8 @@ defmodule Minimo.Object.Map.Kongfu do
   end
   
   def destory(table_map_id) do
-    :ets.delete(table_map)
-    :ets.delete()
+    #:ets.delete(table_map)
+    #:ets.delete()
   end
   
   
