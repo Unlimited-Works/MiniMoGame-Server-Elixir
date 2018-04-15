@@ -3,7 +3,6 @@ defmodule Minimo.Util.Helper do
     quote do
       alias Minimo.Util.IdServer
       alias Minimo.Util.ObjectId
-
     end
     
   end

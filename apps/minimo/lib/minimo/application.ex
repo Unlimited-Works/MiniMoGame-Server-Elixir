@@ -11,9 +11,12 @@ defmodule Minimo.Application do
       {Minimo.Sync.Position , name: Minimo.Sync.Position},
       {Minimo.Socket.Status, name: Minimo.Socket.Status},
       {Minimo.Util.IdServer, name: Minimo.Util.IdServer},
+      {Minimo.Object.ETSRegister, name: Minimo.Object.ETSRegister},
+      # supervisor(Registry, [:unique, :registry_ets_ref]),
     ]
 
-    opts = [strategy: :one_for_one, name: Minimo.TaskSupervisor]
+ #   opts = [strategy: :one_for_one, name: Minimo.TaskSupervisor]
+    opts = [strategy: :one_for_one]
     rst = Supervisor.start_link(children, opts)
 
     IO.puts("#{__MODULE__}: start applications")

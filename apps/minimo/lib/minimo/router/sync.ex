@@ -17,7 +17,6 @@ defmodule Minimo.Router.Sync do
     IO.inspect("#{load_map}")
 
     Minimo.Sync.Position.set_pos(load_map["objId"], List.to_tuple(load_map["pos"]))
-
     
   end
 

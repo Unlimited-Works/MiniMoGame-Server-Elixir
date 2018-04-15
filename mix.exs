@@ -1,6 +1,7 @@
 defmodule MinimogameElixir.MixProject do
   use Mix.Project
 
+
   def project do
     [
       apps_path: "apps",
@@ -20,6 +21,7 @@ defmodule MinimogameElixir.MixProject do
       {:distillery, "~> 1.5", runtime: false},
       {:poolboy, "~> 1.5"},
       {:jason, "~> 1.0"},
+      {:gen_stage, "~> 0.13"},
     ]
   end
 end
