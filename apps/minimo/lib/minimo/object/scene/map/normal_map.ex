@@ -1,10 +1,9 @@
 defmodule Minimo.Object.Map.NormalMap do
   use Minimo.Util.Helper
-  use GenServer
 
   alias Minimo.Object.ETSRegister
-
-  
+  alias Minimo.Object.Map.NameRegisterMap
+  alias Minimo.Object.Map.WriteAtom
   
   # static
   @table_map "#{__MODULE__}.map"
@@ -22,15 +21,9 @@ defmodule Minimo.Object.Map.NormalMap do
   4.
   """
 
-  @doc"""
-  create 
-  """
-  def start_link(opt) do
 
-    
-  end
+
   
-
 
 
   
@@ -57,9 +50,17 @@ defmodule Minimo.Object.Map.NormalMap do
   def create(roles) do
     id = ObjectId.encode!(IdServer.new)
 
-    {:ok, ref_map} = ETSRegister.new_ets("#{@table_map}.#{id}")
-    {:ok, ref_objs} = ETSRegister.new_ets("#{@table_objs}.#{id}")
+    # create table
+    {:ok, {ref_map, ref_objs, pid_write}} = NameRegisterMap.new(id)
+    
+   # {:ok, ref_map} = ETSRegister.new_ets("#{@table_map}.#{id}")
+   # {:ok, ref_objs} = ETSRegister.new_ets("#{@table_objs}.#{id}")
 
+    # 这个进程专门为原子性的写操作创建的，防止ABA并发问题
+   # {:ok, write_server} = DynamicSupervisor.start_child(MapDynamicSupervisor, Minimo.Object.Map.NormalMap.WriteAtom)
+
+    
+    
     # init roles
 
     # append postion initalize
@@ -70,7 +71,7 @@ defmodule Minimo.Object.Map.NormalMap do
 
     for role <- Enum.with_index(newRoles) do
       # build map view
-      :ets.insert(ref_map, {{0,0,0}, role})
+      :ets.insert(ref_map, {{0,0,0}, role["id"]})
 
       ## todo: build other object to the map
       ## notice: if no position defined in the map means it's moveable
@@ -95,17 +96,23 @@ defmodule Minimo.Object.Map.NormalMap do
   # update should be sequence for avoid ABA
   best lock is lock by obj_id
   """
-  def update(table_map, obj_id, f) do
-    map = :ets.lookup(table_map, obj_id)
-    :ets.update_element(table_map, obj_id, {2, f.(map)})
+  def update_obj(id, obj_id, f) do
+    {:ok, {table_map, table_obj, pid_write}} = NameRegisterMap.get(id)
+    WriteAtom.update(table_obj, obj_id, f)
   end
 
   # destory the kongfu room
+  # client shouldn't call destory concurrently to same id
   def destory(id) do
-    ETSRegister.del_ets("#{@table_map}.#{id}")
-    ETSRegister.del_ets("#{@table_objs}.#{id}")
+    #ETSRegister.del_ets("#{@table_map}.#{id}")
+    #ETSRegister.del_ets("#{@table_objs}.#{id}")
+    {:ok, {table_map, table_obj, pid_write}} = NameRegisterMap.get(id)
+    :ets.delete table_map
+    :ets.delete table_obj
+    WriteAtom.delete(pid_write)
+    NameRegisterMap.del(id)
   end
 
-
+  
 end
 

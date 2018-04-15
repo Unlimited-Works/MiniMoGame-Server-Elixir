@@ -1,5 +1,5 @@
 defmodule Minimo.Router.Room do
-  require Minimo.
+  
   @doc """
   登陆之后，用户可以创建一个Room。
   一个Room对应这些功能：
@@ -17,13 +17,13 @@ defmodule Minimo.Router.Room do
   玩家在准备后，不可以更换角色。
   """
 
-  @PROTO_ROOM_CREATE PROTO_ROOM_CREATE
-  @PROTO_ROOM_LEAVE PROTO_ROOM_LEAVE
-  @PROTO_ROOM_BEGIN PROTO_ROOM_BEGIN
-  @PROTO_ROOM_CHOICE_MAP PROTO_ROOM_CHOICE_MAP
-  @PROTO_ROOM_CHOICE_ROLE PROTO_ROOM_CHOICE_ROLE
-  @PROTO_ROOM_READY PROTO_ROOM_READY
-  @PROTO_ROOM_READY_CANCEL PROTO_ROOM_READY_CANCEL
+  @pROTO_ROOM_CREATE "PROTO_ROOM_CREATE"
+  @pROTO_ROOM_LEAVE "PROTO_ROOM_LEAVE"
+  @pROTO_ROOM_BEGIN "PROTO_ROOM_BEGIN"
+  @pROTO_ROOM_CHOICE_MAP "PROTO_ROOM_CHOICE_MAP"
+  @pROTO_ROOM_CHOICE_ROLE "PROTO_ROOM_CHOICE_ROLE"
+  @pROTO_ROOM_READY "PROTO_ROOM_READY"
+  @pROTO_ROOM_READY_CANCEL "PROTO_ROOM_READY_CANCEL"
 
 
   @doc """
@@ -32,14 +32,13 @@ defmodule Minimo.Router.Room do
     type: normal/kongfu/... 创建哪种类型的地图，默认为normal
   }
 
-  load_map可以为nil，表示使用normal模式的地图。（为了减少服务器端的复杂度，将边界代码放在客户端处理）
+  load_map可以为nil，表示使用normal模式的地图。（为了减少服务器端代码的复杂度，将边界代码放在客户端处理）
   """
-  def apply(@PROTO_ROOM_CREATE, load_map) do
+  def apply(@pROTO_ROOM_CREATE, load_map) do
     IO.puts "#{__MODULE__}.apply - #{inspect(load_map)}"
 
     
     {:end, :once, %{"state" => 200, "load" => %{"room_id" => "id001"}}}
-    
   end
   
 end

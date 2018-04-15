@@ -12,6 +12,7 @@ defmodule Minimo.Application do
       {Minimo.Socket.Status, name: Minimo.Socket.Status},
       {Minimo.Util.IdServer, name: Minimo.Util.IdServer},
       {Minimo.Object.ETSRegister, name: Minimo.Object.ETSRegister},
+      {DynamicSupervisor, strategy: :one_for_one, name: WriteAtomMapDynamicSupervisor}
       # supervisor(Registry, [:unique, :registry_ets_ref]),
     ]
 
