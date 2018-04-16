@@ -1,6 +1,6 @@
 defmodule Minimo.Application do
   use Application
-  
+
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
@@ -11,7 +11,7 @@ defmodule Minimo.Application do
       {Minimo.Sync.Position , name: Minimo.Sync.Position},
       {Minimo.Socket.Status, name: Minimo.Socket.Status},
       {Minimo.Util.IdServer, name: Minimo.Util.IdServer},
-      {Minimo.Object.ETSRegister, name: Minimo.Object.ETSRegister},
+      {Minimo.Core.ETSRegister, name: Minimo.Core.ETSRegister},
       {DynamicSupervisor, strategy: :one_for_one, name: WriteAtomMapDynamicSupervisor}
       # supervisor(Registry, [:unique, :registry_ets_ref]),
     ]
@@ -24,7 +24,7 @@ defmodule Minimo.Application do
 
     rst
   end
-  
+
   # used at deal with message
   defp poolboy_config do
     [

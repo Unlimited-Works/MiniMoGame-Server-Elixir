@@ -1,9 +1,9 @@
-defmodule Minimo.Object.ETSRegister do
+defmodule Minimo.Core.ETSRegister do
   use GenServer
-  
+
   require Logger
 
-  
+
   @doc """
   save all ets used in scene and reference it to a string name
   """
@@ -13,7 +13,7 @@ defmodule Minimo.Object.ETSRegister do
     GenServer.start_link(__MODULE__, :ok, opts)
     # Supervisor.child_spec({__MODULE__, init}, opts)
   end
-  
+
   def new_ets(name) do
     case :ets.lookup(__MODULE__, name) do
       [{^name, cur_ref}] ->
@@ -26,11 +26,11 @@ defmodule Minimo.Object.ETSRegister do
 	    write_concurrency: true
 	  ])
 	:ets.insert(__MODULE__, {name, ref})
-	
+
 	{:ok, ref}
     end
     # {:ok, ref} = GenServer.call(__MODULE__, {:new_ets, name})
-    
+
   end
 
   def del_ets(name) do
@@ -42,7 +42,7 @@ defmodule Minimo.Object.ETSRegister do
       other ->
 	{:error, "result not match - #{inspect(other)}"}
     end
-    
+
   end
 
   def get_ref(name) do
@@ -51,7 +51,7 @@ defmodule Minimo.Object.ETSRegister do
       [x] -> {:ok, x}
     end
   end
-  
+
   def init(:ok) do
     atom_reg_name = :ets.new(__MODULE__, [:named_table,
 			  :set,
@@ -61,7 +61,7 @@ defmodule Minimo.Object.ETSRegister do
     {:ok, atom_reg_name}
   end
 
-#  
+#
 #  def handle_call({:new_ets, name}, _from, state) do
 #    case :ets.lookup(__MODULE__, name) do
 #      [{^name, cur_ref}] ->
@@ -74,10 +74,10 @@ defmodule Minimo.Object.ETSRegister do
 #	    write_concurrency: true
 #	  ])
 #	:ets.insert(__MODULE__, {name, ref})
-#	
+#
 #	{:reply, {:ok, ref}, state}
 #    end
-#    
+#
 #  end
 #
 #  def handle_call({:del_ets, name}, _from, state) do
@@ -88,8 +88,8 @@ defmodule Minimo.Object.ETSRegister do
 #      other ->
 #	{:reply, {:error, "result not match - #{inspect(other)}"}, state}
 #    end
-#    
+#
 #  end
-#  
-  
+#
+
 end

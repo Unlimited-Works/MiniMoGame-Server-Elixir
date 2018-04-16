@@ -1,4 +1,4 @@
-defmodule Minimo.Object.Map do
+defmodule Minimo.Core.Map do
   use Minimo.Util.Helper
 
   @doc """

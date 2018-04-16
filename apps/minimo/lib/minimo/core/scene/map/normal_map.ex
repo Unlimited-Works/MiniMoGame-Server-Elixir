@@ -1,10 +1,10 @@
-defmodule Minimo.Object.Map.NormalMap do
+defmodule Minimo.Core.Map.NormalMap do
   use Minimo.Util.Helper
 
   alias Minimo.Object.ETSRegister
   alias Minimo.Object.Map.NameRegisterMap
   alias Minimo.Object.Map.WriteAtom
-  
+
   # static
   @table_map "#{__MODULE__}.map"
   @table_objs "#{__MODULE__}.objs"
@@ -23,10 +23,10 @@ defmodule Minimo.Object.Map.NormalMap do
 
 
 
-  
 
 
-  
+
+
   @doc """
   create a new kongfu map, contains all objects in the map.
   use two ets tables:
@@ -52,15 +52,15 @@ defmodule Minimo.Object.Map.NormalMap do
 
     # create table
     {:ok, {ref_map, ref_objs, pid_write}} = NameRegisterMap.new(id)
-    
+
    # {:ok, ref_map} = ETSRegister.new_ets("#{@table_map}.#{id}")
    # {:ok, ref_objs} = ETSRegister.new_ets("#{@table_objs}.#{id}")
 
     # 这个进程专门为原子性的写操作创建的，防止ABA并发问题
    # {:ok, write_server} = DynamicSupervisor.start_child(MapDynamicSupervisor, Minimo.Object.Map.NormalMap.WriteAtom)
 
-    
-    
+
+
     # init roles
 
     # append postion initalize
@@ -70,7 +70,7 @@ defmodule Minimo.Object.Map.NormalMap do
     end
 
     for role <- Enum.with_index(newRoles) do
-      # build map view
+      # build map view这是位置
       :ets.insert(ref_map, {{0,0,0}, role["id"]})
 
       ## todo: build other object to the map
@@ -101,8 +101,9 @@ defmodule Minimo.Object.Map.NormalMap do
     WriteAtom.update(table_obj, obj_id, f)
   end
 
-  # destory the kongfu room
-  # client shouldn't call destory concurrently to same id
+  @doc """
+  delete the room
+  """
   def destory(id) do
     #ETSRegister.del_ets("#{@table_map}.#{id}")
     #ETSRegister.del_ets("#{@table_objs}.#{id}")
@@ -113,6 +114,6 @@ defmodule Minimo.Object.Map.NormalMap do
     NameRegisterMap.del(id)
   end
 
-  
+
 end
 
